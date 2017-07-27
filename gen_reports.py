@@ -28,7 +28,10 @@ for article in popular_articles:
 # Get the most popular authors based upon views
 sql = '''select authors.name, author_views.views
             from authors,
-            (select articles.author, count(log.path) as views from articles, log where log.path = '/article/' || articles.slug group by articles.author) as author_views
+            (select articles.author, count(log.path) as views
+                from articles, log
+                where log.path = '/article/' || articles.slug
+                group by articles.author) as author_views
          where author_views.author = authors.id
          order by author_views.views desc;
 '''
@@ -45,7 +48,8 @@ for author in popular_authors:
 # 3. Days with more than 1% error rate
 # Get the list of days with more than a 1% error rate
 sql = '''select * from
-            (select total_visits.day, (errors.num::real / total_visits.total::real) as percent
+            (select total_visits.day,
+            (errors.num::real / total_visits.total::real) as percent
             from total_visits, errors
             where total_visits.day = errors.day) as percents
          where percents.percent > 0.01;
