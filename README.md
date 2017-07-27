@@ -15,6 +15,14 @@ Download the [zip file](https://github.com/kinnamonb/NewsReports/archive/master.
 
 After extracting the files, run `python gen_reports.py`
 
+## Database Views
+
+* *total_visits* - Gets the total number of website visits grouped by day
+  `create view total_visits as select time::date as day, count(*) total from log group by day;`
+
+* *errors* - Gets the total number of 404 errors grouped by the day
+  `create view errors as select time::date as day, status, count(*) as num from log where status like '404%' group by day, status;`
+
 ## License
 
 Copyright 2017 Brett Kinnamon
